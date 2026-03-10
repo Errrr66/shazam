@@ -16,6 +16,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+
 async def main():
     # Initialize Shazam
     shazam = Shazam()
@@ -32,11 +33,9 @@ async def main():
     print(f"Recording for {RECORD_SECONDS} seconds...")
 
     try:
-        stream = p.open(format=FORMAT,
-                        channels=CHANNELS,
-                        rate=RATE,
-                        input=True,
-                        frames_per_buffer=CHUNK)
+        stream = p.open(
+            format=FORMAT, channels=CHANNELS, rate=RATE, input=True, frames_per_buffer=CHUNK
+        )
 
         frames = []
 
@@ -60,11 +59,11 @@ async def main():
     # Create a WAV file in memory
     try:
         buffer = io.BytesIO()
-        with wave.open(buffer, 'wb') as wf:
+        with wave.open(buffer, "wb") as wf:
             wf.setnchannels(CHANNELS)
             wf.setsampwidth(sample_size)
             wf.setframerate(RATE)
-            wf.writeframes(b''.join(frames))
+            wf.writeframes(b"".join(frames))
 
         audio_bytes = buffer.getvalue()
 
@@ -76,10 +75,10 @@ async def main():
         print(Serialize.full_track(out))
 
         # Also print a simplified summary
-        if 'track' in out:
-            track = out['track']
-            title = track.get('title', 'Unknown Title')
-            subtitle = track.get('subtitle', 'Unknown Artist')
+        if "track" in out:
+            track = out["track"]
+            title = track.get("title", "Unknown Title")
+            subtitle = track.get("subtitle", "Unknown Artist")
             print(f"\nFound match: {title} by {subtitle}")
         else:
             print("\nNo match found.")
@@ -87,7 +86,7 @@ async def main():
     except Exception as e:
         logger.error(f"Error during recognition: {e}")
 
+
 if __name__ == "__main__":
     loop = asyncio.get_event_loop_policy().get_event_loop()
     loop.run_until_complete(main())
-

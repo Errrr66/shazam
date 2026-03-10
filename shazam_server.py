@@ -19,6 +19,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.post("/recognize")
 async def recognize_song(file: UploadFile = File(...)):
     try:
@@ -41,6 +42,6 @@ async def recognize_song(file: UploadFile = File(...)):
         logger.error(f"Error processing request: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
-
